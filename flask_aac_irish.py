@@ -1,8 +1,11 @@
 from flask import Flask, render_template
 import os
+import glob
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
-
+voice_type = "irish_1"
+alpha = 0.4
+all_pass_filter = 0
 @app.route('/', methods=['POST', 'GET'])
 def home_page():
     from flask import request
@@ -58,10 +61,16 @@ def corrector():
 def voice():
     from flask import request
     if request.method == 'POST':
+        files = glob.glob(f'{os.path.join(basedir,"static/sounds/*.mp3")}')
+        # deleting the files with txt extension
+        for file in files:
+            os.remove(file)
         text = request.form['text']
         voice_type = request.form['voice']
         alpha = request.form['alpha']
         all_pass_filter = request.form['filter']
+        if text == "":
+            return render_template("index.html",alpha=alpha,all_pass_filter=all_pass_filter)
         from tts_corrector import tts_corrector_with_hts_params
         _, sound_file = tts_corrector_with_hts_params(text, voice_type,alpha,all_pass_filter)
         file = sound_file.json()
@@ -79,7 +88,7 @@ def voice():
         filename_to_save = os.path.join(basedir,"static/sounds", filename)
         with open(filename_to_save, "wb") as file_to_save:
             file_to_save.write(sound_)
-        return render_template("index.html",filename=f"/sounds/{filename}")
+        return render_template("index.html",filename=f"/sounds/{filename}",alpha=alpha,all_pass_filter=all_pass_filter)
     return render_template("index.html")
 
 
