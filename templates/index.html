@@ -20,14 +20,14 @@
       <br>
       <label for="alpha">All-pass constant (between 0.2 and 0.6):</label>
       <br>
-      <input type="range" id="alpha" name="alpha" value="0.4" min="0.2" max="0.6" step=0.01
+      <input type="range" id="alpha" name="alpha" value="{{alpha}}" min="0.2" max="0.6" step=0.01
         oninput="this.nextElementSibling.value = this.value">
       Value:
       <output></output>
       <br><br>
       <label for="filter">Filter (between -20 and 20):</label>
       <br>
-      <input type="range" id="filter" name="filter" value="0" min="-20" max="20" step=0.1
+      <input type="range" id="filter" name="filter" value="{{all_pass_filter}}" min="-20" max="20" step=0.1
         oninput="this.nextElementSibling.value = this.value">
       Value:
       <output></output>
